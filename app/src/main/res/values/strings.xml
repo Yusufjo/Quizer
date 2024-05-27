@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Quizer</string>
+    <string name="score">Score :</string>
+    <string name="button_true">True</string>
+    <string name="button_false">False</string>
+    <string name="result">Quiz is finished. Your Score is </string>
+    <string name="start_again">Start Again!</string>
+</resources>
