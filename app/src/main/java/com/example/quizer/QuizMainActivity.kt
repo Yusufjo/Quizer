@@ -14,9 +14,9 @@ class QuizMainActivity : AppCompatActivity() {
     var currentQuestionListIndex = 0
     var score = 0
     val questionList = mutableListOf(
-        QuizDataClass("A slug's blood is green.", true),
-        QuizDataClass("You can lead a cow down stairs but not up stairs.", false),
-        QuizDataClass("Approximately one quarter of human bones are in the feet.", true)
+        Question("A slug's blood is green.", true),
+        Question("You can lead a cow down stairs but not up stairs.", false),
+        Question("Approximately one quarter of human bones are in the feet.", true)
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +51,7 @@ class QuizMainActivity : AppCompatActivity() {
             updateQuestion()
         }
     }
+
     private fun checkAnswer(answer: Boolean) {
         if (questionList[currentQuestionListIndex].answer == answer) {
             if (answer) {
@@ -69,13 +70,14 @@ class QuizMainActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun updateQuestion() {
         if (questionList.size > currentQuestionListIndex) {
             handler.postDelayed({
                 binding.run {
                     textViewQuestion.text = questionList[currentQuestionListIndex].question
                     textViewScoreSize.text = score.toString()
-                    setRestartButtonColors()
+                    restartButtonColors()
                     enableButtons()
                 }
             }, 1000)
@@ -85,7 +87,9 @@ class QuizMainActivity : AppCompatActivity() {
                 enableButtons()
             }, 1000)
         }
+        setSeekBar()
     }
+
     private fun setFinalScreen() {
         binding.run {
             buttonTrue.visibility = View.GONE
@@ -95,26 +99,37 @@ class QuizMainActivity : AppCompatActivity() {
                 "Quiz is finished. YourScore: ${questionList.size}/${score}"
         }
     }
-    private fun setRestartButtonColors() {
+
+    private fun restartButtonColors() {
         binding.buttonTrue.setBackgroundColor(getColor(R.color.backround))
         binding.buttonFalse.setBackgroundColor(getColor(R.color.backround))
     }
 
-    private fun enableButtons(){
+    private fun enableButtons() {
         binding.buttonTrue.isEnabled = true
         binding.buttonFalse.isEnabled = true
     }
-    private fun disableButtons(){
+
+    private fun disableButtons() {
         binding.buttonTrue.isEnabled = false
         binding.buttonFalse.isEnabled = false
     }
-    private fun setStartAgainButton(){
-            score = 0
-            currentQuestionListIndex = 0
+
+    private fun setStartAgainButton() {
+        score = 0
+        currentQuestionListIndex = 0
         handler.postDelayed({
             binding.buttonStartAgain.visibility = View.GONE
             binding.buttonTrue.visibility = View.VISIBLE
             binding.buttonFalse.visibility = View.VISIBLE
-        },1000)
+        }, 1000)
+    }
+
+    private fun setSeekBar() {
+        binding.seekBar.run {
+            max = questionList.size
+            progress = currentQuestionListIndex
+            setOnTouchListener { view, motionEvent -> true }
+        }
     }
 }
